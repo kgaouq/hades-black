@@ -1,8 +1,8 @@
 Base folder contains the code for dongle base\
 Each thingy folder contains the code for the thingy52 attached to the following bodypart:
-* thingy0: head
-* thingy1: wrist
-* thingy2: leg
+* thingy0: head, X-axis toward front 
+* thingy1: wrist, X-axis toward hand
+* thingy2: leg, X-axis toward foot
 
 Required OS:\
 zephyr
