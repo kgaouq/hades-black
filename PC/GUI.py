@@ -16,7 +16,7 @@ import tkinter as tk
 from statistics import mean, stdev
 from scipy.stats import kurtosis, skew
 
-df = pd.read_csv("data\\data_rus.csv", delimiter = ',')
+df = pd.read_csv("data\\data_15_15.csv", delimiter = ',')
 
 # extract X, Y data
 df_x = df.iloc[:, 0:-1]
@@ -131,7 +131,7 @@ def connect(port, queue, event):
                     datas.setdefault(f'z{ID}', []).append(item['Z'])
                 if(count >= 30):
                     for key in datas:
-                        data[key] = datas[key][-30:]
+                        data[key] = datas[key][-15:]
                     df = pd.DataFrame(data)
                     features = [extract_features(df)]
                     df_test = pd.DataFrame(features, columns = feature_name())

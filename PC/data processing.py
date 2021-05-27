@@ -164,8 +164,8 @@ for key in df_collection:
     # feature extraction
     features = []
     
-    for i in range(0, len(df) - 30, 15):
-        window = np.array(range(i, i + 30))
+    for i in range(0, len(df) - 15, 15):
+        window = np.array(range(i, i + 15))
         df_window = df.iloc[window, :]
         features_window = extract_features(df_window)
         features.append(features_window)
@@ -187,6 +187,6 @@ for key in df_collection:
         df_final = df_final.append(df, ignore_index = True)
   
 df_final.dropna(inplace = True)
-df_final.to_csv("data\\data-test.csv", index = False)
+df_final.to_csv("data\\data_15_15.csv", index = False)
     
     
