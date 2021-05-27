@@ -187,6 +187,6 @@ for key in df_collection:
         df_final = df_final.append(df, ignore_index = True)
   
 df_final.dropna(inplace = True)
-#df_final.to_csv("data\\data-test.csv", index = False)
+df_final.to_csv("data\\data-test.csv", index = False)
     
     
