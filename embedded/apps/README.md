@@ -5,7 +5,7 @@ Each thingy folder contains the code for the thingy52 attached to the following 
 * thingy2: leg
 
 Required OS:\
-zephyr\
+zephyr
 
 Build code for base:
 ```
