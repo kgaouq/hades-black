@@ -28,6 +28,11 @@
 
 #define CONN_NUM 3
 
+#define HEAD "C8:91:07:19:03:58"
+#define WRIST "F0:36:FE:87:AA:CC"
+#define LEG "EF:AB:B3:C6:97:40"
+
+
 struct ble_data{
     int8_t dev;
     int8_t indic;
@@ -77,7 +82,6 @@ static uint8_t notify_func(struct bt_conn *conn,
 		return BT_GATT_ITER_STOP;
 	}
     struct ble_data *ble = (struct ble_data*) data;
-    /* json print format goes here */
     int dev = ble->dev;
     int i = (ble->indic)/2;
     int j = (ble->indic)%2;
@@ -145,8 +149,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 	bt_addr_le_to_str(addr, dev, sizeof(dev));
 	printk("[DEVICE]: %s, AD evt type %u, AD data len %u, RSSI %i\n",
 	       dev, type, ad->len, rssi);
-
-	/* We're only interested in connectable events */
 	if (type == BT_GAP_ADV_TYPE_ADV_IND ||
 	    type == BT_GAP_ADV_TYPE_ADV_DIRECT_IND) {
 		struct bt_le_conn_param *param;
@@ -169,9 +171,6 @@ static void device_found(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
 static void start_scan(void)
 {
 	int err;
-
-	/* Use active scanning and disable duplicate filtering to handle any
-	 * devices that might update their advertising data at runtime. */
 	struct bt_le_scan_param scan_param = {
 		.type       = BT_LE_SCAN_TYPE_ACTIVE,
 		.options    = BT_LE_SCAN_OPT_FILTER_WHITELIST,
@@ -275,16 +274,15 @@ void console_init(void){
 
 }
 
-void main(void)
-{
-    console_init();
+void main(void){
+    	console_init();
 	int err;
 	err = bt_enable(NULL);
 	
 	bt_addr_le_t addr0, addr1, addr2;
-	const char *addr0_str = "C8:91:07:19:03:58";
-	const char *addr1_str = "F0:36:FE:87:AA:CC";
-	const char *addr2_str = "EF:AB:B3:C6:97:40";
+	const char *addr0_str = HEAD;
+	const char *addr1_str = WRIST;
+	const char *addr2_str = LEG;
 	const char *type = "random";
 	bt_addr_le_from_str(addr0_str, type, &addr0);
 	bt_addr_le_from_str(addr1_str, type, &addr1);
