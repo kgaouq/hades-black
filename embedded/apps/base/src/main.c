@@ -275,9 +275,8 @@ void console_init(void){
 
 }
 
-void main(void)
-{
-    console_init();
+void main(void){
+    	console_init();
 	int err;
 	err = bt_enable(NULL);
 	
