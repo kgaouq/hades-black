@@ -177,8 +177,6 @@ void main(void)
     
     ble.dev = MOBILE;
     
-    
-	/*********** sensor sample code ***********/
 	const struct device *sensor = device_get_binding(DT_LABEL(DT_INST(0, st_lis2dh)));
 
 	if (sensor == NULL) {
