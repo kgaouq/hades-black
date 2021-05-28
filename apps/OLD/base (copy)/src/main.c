@@ -8,7 +8,6 @@
 
 #include <zephyr/types.h>
 #include <stddef.h>
-#include <stdio.h>
 #include <errno.h>
 #include <zephyr.h>
 #include <sys/printk.h>
@@ -24,7 +23,6 @@
 #include <bluetooth/gatt.h>
 #include <sys/byteorder.h>
 #include <drivers/sensor.h>
-#include <kernel.h>
 
 #define CONN_NUM 3
 
@@ -34,7 +32,7 @@ struct ble_data{
     int32_t data;
 };
 
-struct sensor_value acc[3][3];
+struct sensor_value acc[3];
 
 static struct bt_uuid_16 vnd_enc_uuid = BT_UUID_INIT_16(0xf1de);
 
@@ -78,13 +76,12 @@ static uint8_t notify_func(struct bt_conn *conn,
 	}
     struct ble_data *ble = (struct ble_data*) data;
     /* json print format goes here */
-    int dev = ble->dev;
     int i = (ble->indic)/2;
     int j = (ble->indic)%2;
     if(j){
-        acc[dev][i].val2 = ble->data;
+        acc[i].val2 = ble->data;
     }else{
-        acc[dev][i].val1 = ble->data;
+        acc[i].val1 = ble->data;
     } 
 	
 	return BT_GATT_ITER_CONTINUE;
@@ -281,17 +278,11 @@ void main(void)
 	int err;
 	err = bt_enable(NULL);
 	
-	bt_addr_le_t addr0, addr1, addr2;
-	const char *addr0_str = "C8:91:07:19:03:58";
-	const char *addr1_str = "F0:36:FE:87:AA:CC";
-	const char *addr2_str = "EF:AB:B3:C6:97:40";
+	bt_addr_le_t addr;
+	const char *addr_str = "C8:91:07:19:03:58";
 	const char *type = "random";
-	bt_addr_le_from_str(addr0_str, type, &addr0);
-	bt_addr_le_from_str(addr1_str, type, &addr1);
-	bt_addr_le_from_str(addr2_str, type, &addr2);
-	bt_le_whitelist_add(&addr0);
-	bt_le_whitelist_add(&addr1);
-	bt_le_whitelist_add(&addr2);
+	bt_addr_le_from_str(addr_str, type, &addr);
+	bt_le_whitelist_add(&addr);
 
 	if (err) {
 		printk("Bluetooth init failed (err %d)\n", err);
@@ -304,21 +295,6 @@ void main(void)
 
 	start_scan();
 	while(1){
-	    printf("[{\"node\":0,\"X\":%f,\"Y\":%f,\"Z\":%f,\"time\":%lld},",
-		       sensor_value_to_double(&acc[0][0]),
-		       sensor_value_to_double(&acc[0][1]),
-		       sensor_value_to_double(&acc[0][2]),
-		       k_uptime_get());
-	    printf("{\"node\":1,\"X\":%f,\"Y\":%f,\"Z\":%f,\"time\":%lld},",
-		       sensor_value_to_double(&acc[1][0]),
-		       sensor_value_to_double(&acc[1][1]),
-		       sensor_value_to_double(&acc[1][2]),
-		       k_uptime_get());
-	    printf("{\"node\":2,\"X\":%f,\"Y\":%f,\"Z\":%f,\"time\":%lld}]\n",
-		       sensor_value_to_double(&acc[2][0]),
-		       sensor_value_to_double(&acc[2][1]),
-		       sensor_value_to_double(&acc[2][2]),
-		       k_uptime_get());
-	    k_sleep(K_MSEC(200));
+	    sensor_value_to_double(&accel[0]);
 	}
 }
